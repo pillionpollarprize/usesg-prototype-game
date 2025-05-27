@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    public bool done = false;
+    private void OnTriggerStay(Collider other)
     {
-        
+        if (Input.GetKey(KeyCode.E) && done == false)
+        {
+            print("done task");
+            done = true;
+            TasksManager.instance.Ping();
+
+        }
     }
 }

@@ -42,7 +42,7 @@ public class TerrainGen : MonoBehaviour
                 var pz = (z + seed) / scale;
                 //map[x, z] = (noise.snoise(new float2(px, pz)) + 1) / 2;
                 //map[x, z] = Mathf.PerlinNoise(px, pz) * 4 - 1; w scale 50
-                map[x, z] = Mathf.PerlinNoise(px, pz) * 2 - 1f;
+                map[x, z] = Mathf.PerlinNoise(px, pz) * 2 - 0.75f;
             }
         }
         terrainData.SetHeights(0, 0, map);
