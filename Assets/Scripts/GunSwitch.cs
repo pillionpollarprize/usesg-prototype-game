@@ -6,7 +6,8 @@ public class GunSwitch : MonoBehaviour
 {
     public GameObject[] guns;
     public GameObject tablet;
-    public GameObject tabletpanel;
+    public GameObject tabletPanel;
+    public GameObject inventoryPanel;
     private int index = 0;
 
     void Start()
@@ -17,8 +18,13 @@ public class GunSwitch : MonoBehaviour
     void Update()
     {
         var scroll = Input.GetAxis("Mouse ScrollWheel");
+
         var tabletUp = Input.GetKeyDown(KeyCode.Tab);
         var tabletDown = Input.GetKeyUp(KeyCode.Tab);
+
+        var inventoryUp = Input.GetKeyDown(KeyCode.BackQuote);
+        var inventoryDown = Input.GetKeyUp(KeyCode.BackQuote);
+
         if (tabletUp)
         {
             Switch2Tablet(true);
@@ -27,6 +33,18 @@ public class GunSwitch : MonoBehaviour
         else if (tabletDown)
         {
             Switch2Tablet(false);
+            Cursor.lockState = CursorLockMode.Locked;
+
+        }
+
+        if (inventoryUp)
+        {
+            Switch2Inventory(true);
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else if (inventoryDown)
+        {
+            Switch2Inventory(false);
             Cursor.lockState = CursorLockMode.Locked;
 
         }
@@ -45,7 +63,13 @@ public class GunSwitch : MonoBehaviour
     void Switch2Tablet(bool a)
     {
         guns[index].SetActive(!a);
-        tabletpanel.SetActive(a);
+        tabletPanel.SetActive(a);
+        tablet.SetActive(a);
+    }
+    void Switch2Inventory(bool a)
+    {
+        guns[index].SetActive(!a);
+        inventoryPanel.SetActive(a);
         tablet.SetActive(a);
     }
     void SwitchGun(int newIndex)
