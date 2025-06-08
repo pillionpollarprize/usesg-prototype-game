@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,8 @@ public class Inventory : MonoBehaviour
 {
     public static Inventory instance;
     public int[] inventoryIDs;
-    public Button[] slots;
+    public GameObject[] slots;
+    
     void Start()
     {
         UpdateData();
@@ -38,11 +40,14 @@ public class Inventory : MonoBehaviour
         {
             if (inventoryIDs[i] == 0)
             {
-                slots[i].image.color = Color.gray;
+                slots[i].GetComponent<Button>().image.color = Color.gray;
+                slots[i].GetComponentInChildren<TextMeshProUGUI>().text = " ";
+                print("donedidit");
             }
             if (inventoryIDs[i] == 1)
             {
-                slots[i].image.color = Color.red;
+                slots[i].GetComponent<Button>().image.color = Color.red;
+                slots[i].GetComponentInChildren<TextMeshProUGUI>().text = "Medkit";
             }
         }
     }
