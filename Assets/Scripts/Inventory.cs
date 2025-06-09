@@ -7,18 +7,15 @@ using UnityEngine.UI;
 public class Inventory : MonoBehaviour
 {
     public static Inventory instance;
-    public int[] inventoryIDs;
     public GameObject slotObj;
     public Transform[] slots;
     int space;
     void Start()
     {
         space = slotObj.transform.childCount;
-        inventoryIDs = new int[space];
         slots = new Transform[space];
         for (int i = 0; i < space; i++)
         {
-            inventoryIDs[i] = 0;
             slots[i] = slotObj.transform.GetChild(i);
         }
         print("number of children " + space);
@@ -39,34 +36,40 @@ public class Inventory : MonoBehaviour
     }
     public void GetPickedUpItem(int ID)
     {
-        for(int i = 0; i < inventoryIDs.Length; i++)
+        for(int i = 0; i < slots.Length; i++)
         {
-            if (inventoryIDs[i] == 0)
+            if (slots[i].GetComponent<InventorySlotBehavior>().holdID == 0)
             {
-                inventoryIDs[i] = ID;
+                slots[i].GetComponent<InventorySlotBehavior>().holdID = ID;
                 UpdateData();
                 break;
             }
         }
     }
+    void SetSlots()
+    {
+        for (int i = 0; i < space; i++)
+        {
+            slotObj.transform.GetChild(i).GetComponent<InventorySlotBehavior>().holdID = 0;
+        }
+    }
     void UpdateData()
     {
         // needs some sort of library for ID's like Minecraft does it
-        for (int i = 0; i < inventoryIDs.Length; i++)
+        for (int i = 0; i < slots.Length; i++)
         {
-            if (inventoryIDs[i] == 0)
+            if (slots[i].GetComponent<InventorySlotBehavior>().holdID == 0)
             {
                 slots[i].GetComponent<Button>().image.color = Color.gray;
                 slots[i].GetComponentInChildren<TextMeshProUGUI>().text = " ";
             }
-            if (inventoryIDs[i] == 1)
+            if (slots[i].GetComponent<InventorySlotBehavior>().holdID == 1)
             {
                 slots[i].GetComponent<Button>().image.color = Color.red;
                 slots[i].GetComponentInChildren<TextMeshProUGUI>().text = "Medkit";
             }
         }
         print("first child " + slotObj.transform.GetChild(0).GetComponentInChildren<TextMeshProUGUI>().text);
-
-
     }
+
 }
