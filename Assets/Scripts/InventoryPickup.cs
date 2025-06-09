@@ -7,10 +7,13 @@ public class InventoryPickup : MonoBehaviour
     public int id;
     private void OnTriggerStay(Collider other)
     {
-        if (Input.GetKey(KeyCode.E))
+        if (other.CompareTag("Player"))
         {
-            Inventory.instance.GetPickedUpItem(id);
-            Destroy(gameObject);
+            if (Input.GetKey(KeyCode.E))
+            {
+                Inventory.instance.GetPickedUpItem(id);
+                Destroy(gameObject);
+            }
         }
     }
 }
