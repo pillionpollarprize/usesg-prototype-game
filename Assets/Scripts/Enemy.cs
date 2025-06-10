@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
         }
         var distance = Vector3.Distance(transform.position, target.position);
 
-        if (distance - agent.stoppingDistance <= 0.3f && !isAttacking)
+        if (distance - agent.stoppingDistance <= 0.3f && !isAttacking && target.GetComponent<Health>().health != 0)
         {
             StartCoroutine(Attack());
             isAttacking = true;
@@ -55,9 +55,11 @@ public class Enemy : MonoBehaviour
     }
     IEnumerator Attack()
     {
-        agent.enabled = false;
 
         target.GetComponent<Health>().TakeDamage(damage);
+
+        agent.enabled = false;
+        
         src.PlayOneShot(chompSound);
         print("chomp");
 
