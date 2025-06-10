@@ -7,7 +7,6 @@ public class Shoot : MonoBehaviour
 {
     public GameObject bulletPrefab;
     public Transform muzzle;
-    public GameObject shooter;
 
     public int gunDamage = 3;
     public float cooldown = 0.3f;
@@ -28,22 +27,18 @@ public class Shoot : MonoBehaviour
         trail = GetComponent<LineRenderer>();
         currentAmmo = magazineCapacity;
         magazineText.text = currentAmmo.ToString();
-        shooter = GameObject.FindWithTag("Player");
     }
 
     void Update()
     {
-        if (currentAmmo > 0 && canShoot && Input.GetMouseButtonDown(0))
+        if (currentAmmo > 0 && canShoot == true && reloading == false && Input.GetMouseButtonDown(0))
         {
+            currentAmmo--;
             nextFire = Time.time + cooldown;
 
             StartCoroutine(ShotEffect());
             trail.SetPosition(0, muzzle.position);
-            currentAmmo--;
-            //var bullet = Instantiate(bulletPrefab, muzzle.position, muzzle.rotation);
-            //var bulletProperties = bullet.GetComponent<Bullet>();
 
-            //bulletProperties.shooter = GameObject.FindWithTag("Player");
             RaycastHit hit;
             var screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0);
             var ray = Camera.main.ScreenPointToRay(screenCenter);
@@ -56,7 +51,7 @@ public class Shoot : MonoBehaviour
                 if (health != null)
                 {
                     health?.TakeDamage(gunDamage);
-                    print($"Hit {hit} for {gunDamage} damage");
+                    print($"{gunDamage} damage");
                 }
                 else
                 {
@@ -69,7 +64,6 @@ public class Shoot : MonoBehaviour
                 print("Missed the target");
             }
             StartCoroutine(Cooldown());
-            print($"currentammo: {currentAmmo} cooldown: {cooldown} shoot?: {canShoot}");
         }
         else if (currentAmmo == 0)
         {
@@ -77,13 +71,16 @@ public class Shoot : MonoBehaviour
             {
                 print("reloading");
                 StartCoroutine(Reload());
+                canShoot = false;
                 reloading = true;
             }
             
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && reloading == false)
         {
+            canShoot = false;
+            reloading = true;
             StartCoroutine(Reload());
         }
         magazineText.text = currentAmmo.ToString();
@@ -105,7 +102,6 @@ public class Shoot : MonoBehaviour
     }
     IEnumerator Reload()
     {
-        canShoot = false;
         for(int i = 0; i < 360; i++)
         {
             yield return new WaitForSeconds(0.00001f);

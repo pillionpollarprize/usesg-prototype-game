@@ -44,15 +44,15 @@ public class Health : MonoBehaviour
                 warningText.text = "";
             }
         }
-        
+
     }
     public void TakeDamage(int damage)
     {
-        if(shield > 0)
+        if (shield > 0)
         {
             shield = Mathf.Clamp(shield - damage, 0, maxShield);
         }
-        else if(shield <= 0)
+        else if (shield <= 0)
         {
             health = Mathf.Clamp(health - damage, 0, maxHealth);
         }
@@ -65,10 +65,7 @@ public class Health : MonoBehaviour
         {
             if (isPlayer)
             {
-                var camera = Camera.main;
-                camera.gameObject.transform.position = new Vector3(transform.position.x, transform.position.y - 0.7f, transform.position.z);
-                deathscreen.gameObject.SetActive(true);
-                StartCoroutine(SetOpacity());
+                Death();
             }
             else
             {
@@ -88,6 +85,18 @@ public class Health : MonoBehaviour
         healthBar.localScale = new Vector3((mult * (float)health) / maxHealth, 0.5f, 1);
         shieldBar.localScale = new Vector3((mult * (float)shield) / maxShield, 0.5f, 1);
 
+    }
+    void Death()
+    {
+        var camera = Camera.main;
+
+        GetComponent<Move>().enabled = !GetComponent<Move>().enabled;
+        camera.GetComponent<GunSwitch>().Holster();
+        camera.GetComponent<GunSwitch>().enabled = !camera.GetComponent<GunSwitch>().enabled;
+        camera.gameObject.transform.position = new Vector3(transform.position.x, transform.position.y - 0.7f, transform.position.z);
+
+        deathscreen.gameObject.SetActive(true);
+        StartCoroutine(SetOpacity());
     }
     IEnumerator SetOpacity()
     {

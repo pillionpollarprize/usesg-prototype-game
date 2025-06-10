@@ -78,4 +78,8 @@ public class GunSwitch : MonoBehaviour
         guns[newIndex].SetActive(true);
         index = newIndex;
     }
+    public void Holster()
+    {
+        guns[index].SetActive(false);
+    }
 }
